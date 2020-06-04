@@ -10,7 +10,8 @@ import {
   UserCtrl,
   DialogCtrl,
   MessageCtrl,
-  UploadFileCtrl
+  UploadFileCtrl,
+  NewsCtrl
 } from "../controllers";
 
 const createRoutes = (app: express.Express, io: socket.Server) => {
@@ -18,6 +19,7 @@ const createRoutes = (app: express.Express, io: socket.Server) => {
   const DialogController = new DialogCtrl(io);
   const MessageController = new MessageCtrl(io);
   const UploadFileController = new UploadFileCtrl();
+  const NewsController = new NewsCtrl(io);
 
   app.use(bodyParser.json());
   app.use(checkAuth);
@@ -41,6 +43,10 @@ const createRoutes = (app: express.Express, io: socket.Server) => {
 
   app.post("/files", multer.single("file"), UploadFileController.create);
   app.delete("/files", UploadFileController.delete);
+
+  app.get("/news", NewsController.index);
+  app.post("/news", NewsController.create);
+  app.delete("/news", NewsController.delete);
 };
 
 export default createRoutes;
